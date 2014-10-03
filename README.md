@@ -12,7 +12,7 @@ sudo apt-get install imagemagick
 ```
 
 There have been reports as recently as 2014-5-23 that ImageMagick is not included in the repository for Ubuntu 14.04.
-See (http://askubuntu.com/questions/471045/14-04-doesnt-have-package-imagemagick)[http://askubuntu.com/questions/471045/14-04-doesnt-have-package-imagemagick].
+See [http://askubuntu.com/questions/471045/14-04-doesnt-have-package-imagemagick](http://askubuntu.com/questions/471045/14-04-doesnt-have-package-imagemagick).
 
 # Install
 
