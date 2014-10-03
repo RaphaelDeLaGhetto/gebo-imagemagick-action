@@ -1,0 +1,6 @@
+{
+    "logLevel": "trace",
+    "imagemagick": {
+        "timeout": 20000
+    }
+}
