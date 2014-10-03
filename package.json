@@ -1,0 +1,25 @@
+{
+  "name": "gebo-imagemagick",
+  "version": "0.0.0",
+  "description": "An ImageMagick-dependent image converter",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodeunit test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RaphaelDeLaGhetto/gebo-imagemagick.git"
+  },
+  "keywords": [
+    "ImageMagick",
+    "gebo",
+    "image",
+    "converter"
+  ],
+  "author": "Daniel Bidulock",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/RaphaelDeLaGhetto/gebo-imagemagick/issues"
+  },
+  "homepage": "https://github.com/RaphaelDeLaGhetto/gebo-imagemagick"
+}
