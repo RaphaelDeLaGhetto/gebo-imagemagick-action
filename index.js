@@ -3,7 +3,6 @@ var exec = require('child_process').exec,
     mkdirp = require('mkdirp'),
     nconf = require('nconf'),
     q = require('q'),
-//    spawn = require('child_process').spawn,
     winston = require('winston');
 
 // Logging stuff           
