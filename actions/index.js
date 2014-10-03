@@ -2,6 +2,7 @@
 
 var fs = require('fs'),
     lib = require('../lib'),
+    mime = require('mime'),
     nconf = require('nconf'),
     q = require('q'),
     winston = require('winston');
@@ -35,6 +36,10 @@ module.exports = function() {
 
                 // Respect the original file name
                 var filename = lib.getOutputFileName(message.file.originalname, message.content.format);
+
+                if (mime.lookup(path) === 'application/zip')  {
+                  filename += '.zip';
+                }
  
                 var newPath = path.split('/');
                 newPath.pop();
@@ -54,16 +59,6 @@ module.exports = function() {
                       deferred.resolve(domain + '/' + message.file.path.split('/').pop() + '/' + filename);
                     }
                   });
-//                fs.writeFile(destDir + filename, text, function(err) { 
-//                    if (message.content.raw) {      
-//                      fs.realpath(destDir + filename, function(err, resolvedPath) {
-//                            deferred.resolve({ filePath: resolvedPath, fileName: filename });
-//                        });
-//                    }
-//                    else {
-//                      deferred.resolve(domain + '/' + message.file.path.split('/').pop() + '/' + filename);
-//                    }
-//                  });
               }).
             catch(function(err) {
                 deferred.resolve({ error: err });
