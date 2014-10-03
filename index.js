@@ -1,6 +1,7 @@
 var archiver = require('archiver'),
     exec = require('child_process').exec,
     fs = require('fs'),
+    mime = require('mime'),
     mkdirp = require('mkdirp'),
     nconf = require('nconf'),
     q = require('q'),
@@ -45,8 +46,14 @@ function _convert(path, format, outdir) {
           deferred.resolve({ error: err });
         }
 
-        var command = 'convert ' + path + ' ' + outdir + '/' + outputFileName +
-                      ' & echo $! > /tmp/' + outputFileName + '.pid';
+        // PDFs may produce multiple images
+        var command = 'convert ' + path + ' ' + outdir + '/';
+        if (mime.lookup(path) === 'application/pdf') {
+          command += '%0d_';
+        }
+        command += outputFileName + ' & echo $! > /tmp/' + outputFileName + '.pid';
+
+
         if (logLevel === 'trace') logger.info('gebo-imagemagick:', command);
     
         exec(command, function(err, stdout, stderr) {
@@ -84,10 +91,9 @@ function _convert(path, format, outdir) {
                           files.forEach(function(file) {
                                 archive.append(fs.createReadStream(resolvedPath + '/' + file), { name: file });
                             });
-                          archive.finalize();
-                        }
+                          archive.finalize(); }
                         else {
-                          deferred.resolve(resolvedPath + '/' +  outputFileName);
+                          deferred.resolve(resolvedPath + '/' +  files[0]);
                         }
                     });
                 });

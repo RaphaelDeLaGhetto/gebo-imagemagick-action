@@ -437,7 +437,7 @@ exports.convert = {
         doc.convert('./test/pics/gebo.pdf', 'bmp', '/tmp/gebo-imagemagick').
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
-                test.equal(path, '/tmp/gebo-imagemagick/gebo.bmp');
+                test.equal(path, '/tmp/gebo-imagemagick/0_gebo.bmp');
                 try {
                   fs.openSync(path, 'r');
                   test.ok(true);
@@ -458,7 +458,7 @@ exports.convert = {
         doc.convert('./test/pics/gebo.pdf', 'gif', '/tmp/gebo-imagemagick').
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
-                test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
+                test.equal(path, '/tmp/gebo-imagemagick/0_gebo.gif');
                 try {
                   fs.openSync(path, 'r');
                   test.ok(true);
@@ -479,7 +479,7 @@ exports.convert = {
         doc.convert('./test/pics/gebo.pdf', 'jpg', '/tmp/gebo-imagemagick').
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
-                test.equal(path, '/tmp/gebo-imagemagick/gebo.jpg');
+                test.equal(path, '/tmp/gebo-imagemagick/0_gebo.jpg');
                 try {
                   fs.openSync(path, 'r');
                   test.ok(true);
@@ -500,7 +500,7 @@ exports.convert = {
         doc.convert('./test/pics/gebo.pdf', 'png', '/tmp/gebo-imagemagick').
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
-                test.equal(path, '/tmp/gebo-imagemagick/gebo.png');
+                test.equal(path, '/tmp/gebo-imagemagick/0_gebo.png');
                 try {
                   fs.openSync(path, 'r');
                   test.ok(true);
@@ -521,7 +521,7 @@ exports.convert = {
         doc.convert('./test/pics/gebo.pdf', 'tif', '/tmp/gebo-imagemagick').
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
-                test.equal(path, '/tmp/gebo-imagemagick/gebo.tif');
+                test.equal(path, '/tmp/gebo-imagemagick/0_gebo.tif');
                 try {
                   fs.openSync(path, 'r');
                   test.ok(true);
@@ -691,12 +691,104 @@ exports.convert = {
     /**
      * Multipage PDF
      */
-    'Convert a multipage PDF to a BMP': function(test) {
+    'Convert a multipage PDF to a collection of BMPs': function(test) {
         test.expect(4);
         doc.convert('./test/pics/multipage.pdf', 'bmp', '/tmp/gebo-imagemagick').
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/zip');
                 test.equal(path, '/tmp/gebo-imagemagick/multipage.bmp.zip');
+                try {
+                  var files = fs.readdirSync('/tmp/gebo-imagemagick');
+                  test.equal(files.length, 5);
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a multipage PDF to a collection of GIFs ': function(test) {
+        test.expect(4);
+        doc.convert('./test/pics/multipage.pdf', 'gif', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'application/zip');
+                test.equal(path, '/tmp/gebo-imagemagick/multipage.gif.zip');
+                try {
+                  var files = fs.readdirSync('/tmp/gebo-imagemagick');
+                  test.equal(files.length, 5);
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a multipage PDF to a collection of JPGs ': function(test) {
+        test.expect(4);
+        doc.convert('./test/pics/multipage.pdf', 'jpg', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'application/zip');
+                test.equal(path, '/tmp/gebo-imagemagick/multipage.jpg.zip');
+                try {
+                  var files = fs.readdirSync('/tmp/gebo-imagemagick');
+                  test.equal(files.length, 5);
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a multipage PDF to a collection of PNGs ': function(test) {
+        test.expect(4);
+        doc.convert('./test/pics/multipage.pdf', 'png', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'application/zip');
+                test.equal(path, '/tmp/gebo-imagemagick/multipage.png.zip');
+                try {
+                  var files = fs.readdirSync('/tmp/gebo-imagemagick');
+                  test.equal(files.length, 5);
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a multipage PDF to a collection of TIFs ': function(test) {
+        test.expect(4);
+        doc.convert('./test/pics/multipage.pdf', 'tif', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'application/zip');
+                test.equal(path, '/tmp/gebo-imagemagick/multipage.tif.zip');
                 try {
                   var files = fs.readdirSync('/tmp/gebo-imagemagick');
                   test.equal(files.length, 5);
