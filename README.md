@@ -20,6 +20,20 @@ See (http://askubuntu.com/questions/471045/14-04-doesnt-have-package-imagemagick
 sudo npm install gebo-imagemagick
 ```
 
+# Configure gebo.json
+
+The maximum allowable processing time is set in gebo.json:
+
+```
+{
+    ...
+    "imagemagick": {
+        "timeout": 20000
+    }
+    ...
+}
+```
+
 # Test
 
 ```
