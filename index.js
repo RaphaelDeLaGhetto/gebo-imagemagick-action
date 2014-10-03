@@ -1,4 +1,5 @@
-var exec = require('child_process').exec,
+var archiver = require('archiver'),
+    exec = require('child_process').exec,
     fs = require('fs'),
     mkdirp = require('mkdirp'),
     nconf = require('nconf'),
@@ -57,7 +58,38 @@ function _convert(path, format, outdir) {
             else {
               if (logLevel === 'trace' && stderr) logger.warn('gebo-imagemagick:', stderr);
               fs.realpath(outdir, function(err, resolvedPath) {
-                    deferred.resolve(resolvedPath + '/' +  outputFileName);
+                    fs.readdir(resolvedPath, function(err, files) {
+                        if (err) {
+                          if (logLevel === 'trace') logger.error('gebo-imagemagick, fs.readdir:', err);
+                          deferred.resolve({ error: err });
+                        }
+                        // Converting a PDF may potentially generate multiple files. I.e., one for each page.
+                        if (files.length > 1) {
+                          var zipFileName = resolvedPath + '/' + outputFileName + '.zip';
+                          var output = fs.createWriteStream(zipFileName);
+                          var archive = archiver('zip');
+
+                          output.on('close', function() {
+                                if (logLevel === 'trace') logger.info('gebo-imagemagick, archiver:', archive.pointer() + ' total bytes in ' + zipFileName);
+                                deferred.resolve(zipFileName);
+                            });
+
+                          archive.on('error', function(err) {
+                                if (logLevel === 'trace') logger.error('gebo-imagemagick, archiver:', err);
+                                deferred.resolve({ error: err });
+                            });
+
+                          archive.pipe(output);
+
+                          files.forEach(function(file) {
+                                archive.append(fs.createReadStream(resolvedPath + '/' + file), { name: file });
+                            });
+                          archive.finalize();
+                        }
+                        else {
+                          deferred.resolve(resolvedPath + '/' +  outputFileName);
+                        }
+                    });
                 });
             }
           });
