@@ -1,4 +1,5 @@
 {
+    "domain":"https://localhost",
     "logLevel": "trace",
     "imagemagick": {
         "timeout": 20000
