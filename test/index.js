@@ -687,6 +687,34 @@ exports.convert = {
                 test.done();
               });
     },
+
+    /**
+     * Multipage PDF
+     */
+    'Convert a multipage PDF to a BMP': function(test) {
+        test.expect(4);
+        doc.convert('./test/pics/multipage.pdf', 'bmp', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'application/zip');
+                test.equal(path, '/tmp/gebo-imagemagick/multipage.bmp.zip');
+                try {
+                  var files = fs.readdirSync('/tmp/gebo-imagemagick');
+                  test.equal(files.length, 5);
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+
 };
 
 
