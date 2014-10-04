@@ -76,7 +76,7 @@ The maximum allowable processing time is set in gebo.json:
 
 ```
 var gebo = require('gebo-server')();
-gebo.enable(require('gebo-imagemagick-action'));
+gebo.enable('imagemagick', require('gebo-imagemagick-action'));
 ``` 
 
 # Test
