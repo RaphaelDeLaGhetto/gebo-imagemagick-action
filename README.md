@@ -1,5 +1,5 @@
-gebo-imagemagick
-================
+gebo-imagemagick-action
+=======================
 
 An ImageMagick-dependent gebo action image converter
 
@@ -55,7 +55,7 @@ dpkg -r imagemagick-6.8.9
 # Install
 
 ```
-sudo npm install gebo-imagemagick
+sudo npm install gebo-imagemagick-action
 ```
 
 # Configure gebo.json
@@ -76,7 +76,7 @@ The maximum allowable processing time is set in gebo.json:
 
 ```
 var gebo = require('gebo-server')();
-gebo.enable(require('gebo-imagemagick'));
+gebo.enable(require('gebo-imagemagick-action'));
 ``` 
 
 # Test
