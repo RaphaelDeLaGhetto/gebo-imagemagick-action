@@ -559,6 +559,136 @@ exports.convert = {
     },
 
     /**
+     * PNG
+     */
+    'Convert a PNG to a BMP': function(test) {
+        test.expect(3);
+        doc.convert('./test/pics/gebo.png', 'bmp', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'image/bmp');
+                test.equal(path, '/tmp/gebo-imagemagick/gebo.bmp');
+                try {
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a PNG to a GIF': function(test) {
+        test.expect(3);
+        doc.convert('./test/pics/gebo.png', 'gif', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'image/gif');
+                test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
+                try {
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a PNG to a JPG': function(test) {
+        test.expect(3);
+        doc.convert('./test/pics/gebo.png', 'jpg', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'image/jpeg');
+                test.equal(path, '/tmp/gebo-imagemagick/gebo.jpg');
+                try {
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a PNG to a PDF': function(test) {
+        test.expect(3);
+        doc.convert('./test/pics/gebo.png', 'pdf', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'application/pdf');
+                test.equal(path, '/tmp/gebo-imagemagick/gebo.pdf');
+                try {
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert a PNG to a TIF': function(test) {
+        test.expect(3);
+        doc.convert('./test/pics/gebo.png', 'tif', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'image/tiff');
+                test.equal(path, '/tmp/gebo-imagemagick/gebo.tif');
+                try {
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    'Convert an extensionless PNG to a BMP': function(test) {
+        test.expect(3);
+        doc.convert('./test/pics/gebopng', 'bmp', '/tmp/gebo-imagemagick').
+            then(function(path) {
+                test.equal(mime.lookup(path), 'image/bmp');
+                test.equal(path, '/tmp/gebo-imagemagick/gebopng.bmp');
+                try {
+                  fs.openSync(path, 'r');
+                  test.ok(true);
+                }
+                catch (err) {
+                  test.ok(false, err);
+                }
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+
+    /**
      * TIF
      */
     'Convert a TIF to a BMP': function(test) {
@@ -805,8 +935,6 @@ exports.convert = {
                 test.done();
               });
     },
-
-
 };
 
 
