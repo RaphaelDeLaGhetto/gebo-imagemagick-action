@@ -1,6 +1,6 @@
 {
   "name": "gebo-imagemagick-action",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "An ImageMagick-dependent gebo action image converter",
   "main": "index.js",
   "scripts": {
