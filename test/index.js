@@ -48,6 +48,32 @@ exports.convert = {
     },
 
     /**
+     * Time out
+     */
+    'Kill the imagemagick process if it executes longer than allowed': function(test) {
+        test.expect(1);
+        actionModule.actions.convert({ resource: 'convert',
+                                       execute: 'true',
+                                     },
+                                     { content: { format: 'gif', raw: true, timeLimit: 5 },
+                                       file: { 
+                                            path: '/tmp/gebo.bmp',
+                                            originalname: 'my.bmp',
+                                            type: 'image/bmp', 
+                                            size: 968970,
+                                       },
+              }).
+            then(function(pic) {
+                test.equal(pic.error, 'Sorry, that file took too long to process');
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
+
+    /**
      * BMP
      */
     'Convert BMP to a GIF and return raw data': function(test) {

@@ -5,6 +5,7 @@ var fs = require('fs'),
     mime = require('mime'),
     nconf = require('nconf'),
     q = require('q'),
+    utils = require('gebo-utils'),
     winston = require('winston');
 
 module.exports = function() {
@@ -31,11 +32,11 @@ module.exports = function() {
         if (verified.admin || verified.execute) {
 
           var destDir = './public/' + message.file.path.split('/').pop();
-          lib.convert(message.file.path, message.content.format, destDir).
+          lib.convert(message.file.path, destDir, message.content).
             then(function(path) {
 
                 // Respect the original file name
-                var filename = lib.getOutputFileName(message.file.originalname, message.content.format);
+                var filename = utils.getOutputFileName(message.file.originalname, message.content.format);
 
                 if (mime.lookup(path) === 'application/zip')  {
                   filename += '.zip';

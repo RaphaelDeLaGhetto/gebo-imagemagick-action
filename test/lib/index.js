@@ -19,7 +19,7 @@ exports.convert = {
      */
     'Write the imagemagick PID to a file in the output directory': function(test) {
         test.expect(1);
-        doc.convert('./test/pics/gebo.png', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 try {
                   fs.openSync('/tmp/gebo.jpg.pid', 'r');
@@ -38,7 +38,7 @@ exports.convert = {
 
     'Kill the imagemagick process if it executes longer than allowed': function(test) {
         test.expect(1);
-        doc.convert('./test/pics/gebo.bmp', 'gif', '/tmp/gebo-imagemagick', { timeLimit: 50 }).
+        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'gif', timeLimit: 50 }).
             then(function(path) {
                 test.ok(false, 'This should throw an error');
                 test.done();
@@ -54,7 +54,7 @@ exports.convert = {
      */
     'Convert a BMP to a GIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.bmp', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
@@ -75,7 +75,7 @@ exports.convert = {
 
     'Convert a BMP to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.bmp', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.jpg');
@@ -96,7 +96,7 @@ exports.convert = {
 
     'Convert a BMP to an PDF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.bmp', 'pdf', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'pdf' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/pdf');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.pdf');
@@ -117,7 +117,7 @@ exports.convert = {
     
     'Convert a BMP to a PNG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.bmp', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.png');
@@ -138,7 +138,7 @@ exports.convert = {
 
     'Convert a BMP to a TIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.bmp', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.tif');
@@ -159,7 +159,7 @@ exports.convert = {
 
     'Convert a BMP without an extension to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebobmp', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebobmp', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/gebobmp.jpg');
@@ -183,7 +183,7 @@ exports.convert = {
      */
     'Convert a GIF to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.gif', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.gif', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
@@ -204,7 +204,7 @@ exports.convert = {
 
     'Convert a GIF to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.gif', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.gif', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.jpg');
@@ -225,7 +225,7 @@ exports.convert = {
 
     'Convert a GIF to a PDF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.gif', 'pdf', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.gif', '/tmp/gebo-imagemagick', { format: 'pdf' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/pdf');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.pdf');
@@ -246,7 +246,7 @@ exports.convert = {
 
     'Convert a GIF to a PNG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.gif', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.gif', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.png');
@@ -267,7 +267,7 @@ exports.convert = {
 
     'Convert a GIF to a TIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.gif', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.gif', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.tif');
@@ -288,7 +288,7 @@ exports.convert = {
 
     'Convert a GIF without a file extension to a PNG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebogif', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebogif', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
                 test.equal(path, '/tmp/gebo-imagemagick/gebogif.png');
@@ -312,7 +312,7 @@ exports.convert = {
      */
     'Convert a JPG to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.jpg', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.jpg', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.bmp');
@@ -333,7 +333,7 @@ exports.convert = {
 
     'Convert a JPG to a GIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.jpg', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.jpg', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
@@ -354,7 +354,7 @@ exports.convert = {
 
     'Convert a JPG to a PDF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.jpg', 'pdf', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.jpg', '/tmp/gebo-imagemagick', { format: 'pdf' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/pdf');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.pdf');
@@ -375,7 +375,7 @@ exports.convert = {
 
     'Convert a JPG to a PNG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.jpg', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.jpg', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.png');
@@ -396,7 +396,7 @@ exports.convert = {
 
     'Convert a JPG to a TIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.jpg', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.jpg', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.tif');
@@ -417,7 +417,7 @@ exports.convert = {
 
     'Convert a JPG without a file extension to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebojpg', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebojpg', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
                 test.equal(path, '/tmp/gebo-imagemagick/gebojpg.bmp');
@@ -442,7 +442,7 @@ exports.convert = {
      */
     'Convert a PDF to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.pdf', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.pdf', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
                 test.equal(path, '/tmp/gebo-imagemagick/0_gebo.bmp');
@@ -463,7 +463,7 @@ exports.convert = {
 
     'Convert a PDF to a GIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.pdf', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.pdf', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
                 test.equal(path, '/tmp/gebo-imagemagick/0_gebo.gif');
@@ -484,7 +484,7 @@ exports.convert = {
 
     'Convert a PDF to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.pdf', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.pdf', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/0_gebo.jpg');
@@ -505,7 +505,7 @@ exports.convert = {
 
     'Convert a PDF to a PNG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.pdf', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.pdf', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
                 test.equal(path, '/tmp/gebo-imagemagick/0_gebo.png');
@@ -526,7 +526,7 @@ exports.convert = {
 
     'Convert a PDF to a TIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.pdf', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.pdf', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
                 test.equal(path, '/tmp/gebo-imagemagick/0_gebo.tif');
@@ -547,7 +547,7 @@ exports.convert = {
 
     'Convert a PDF without a file extension to a TIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebopdf', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebopdf', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
                 test.equal(path, '/tmp/gebo-imagemagick/gebopdf.tif');
@@ -571,7 +571,7 @@ exports.convert = {
      */
     'Convert a PNG to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.png', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.bmp');
@@ -592,7 +592,7 @@ exports.convert = {
 
     'Convert a PNG to a GIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.png', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
@@ -613,7 +613,7 @@ exports.convert = {
 
     'Convert a PNG to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.png', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.jpg');
@@ -634,7 +634,7 @@ exports.convert = {
 
     'Convert a PNG to a PDF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.png', 'pdf', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'pdf' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/pdf');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.pdf');
@@ -655,7 +655,7 @@ exports.convert = {
 
     'Convert a PNG to a TIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.png', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/tiff');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.tif');
@@ -676,7 +676,7 @@ exports.convert = {
 
     'Convert an extensionless PNG to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebopng', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebopng', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
                 test.equal(path, '/tmp/gebo-imagemagick/gebopng.bmp');
@@ -701,7 +701,7 @@ exports.convert = {
      */
     'Convert a TIF to a BMP': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.tif', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.tif', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/bmp');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.bmp');
@@ -722,7 +722,7 @@ exports.convert = {
 
     'Convert a TIF to a GIF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.tif', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.tif', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/gif');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.gif');
@@ -743,7 +743,7 @@ exports.convert = {
 
     'Convert a TIF to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.tif', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.tif', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.jpg');
@@ -764,7 +764,7 @@ exports.convert = {
 
     'Convert a TIF to a PDF': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.tif', 'pdf', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.tif', '/tmp/gebo-imagemagick', { format: 'pdf' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/pdf');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.pdf');
@@ -785,7 +785,7 @@ exports.convert = {
 
     'Convert a TIF to a PNG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebo.tif', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebo.tif', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/png');
                 test.equal(path, '/tmp/gebo-imagemagick/gebo.png');
@@ -807,7 +807,7 @@ exports.convert = {
 
     'Convert an TIF without a file extension to a JPG': function(test) {
         test.expect(3);
-        doc.convert('./test/pics/gebotif', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/gebotif', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'image/jpeg');
                 test.equal(path, '/tmp/gebo-imagemagick/gebotif.jpg');
@@ -831,7 +831,7 @@ exports.convert = {
      */
     'Convert a multipage PDF to a collection of BMPs': function(test) {
         test.expect(4);
-        doc.convert('./test/pics/multipage.pdf', 'bmp', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/multipage.pdf', '/tmp/gebo-imagemagick', { format: 'bmp' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/zip');
                 test.equal(path, '/tmp/gebo-imagemagick/multipage.bmp.zip');
@@ -854,7 +854,7 @@ exports.convert = {
 
     'Convert a multipage PDF to a collection of GIFs ': function(test) {
         test.expect(4);
-        doc.convert('./test/pics/multipage.pdf', 'gif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/multipage.pdf', '/tmp/gebo-imagemagick', { format: 'gif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/zip');
                 test.equal(path, '/tmp/gebo-imagemagick/multipage.gif.zip');
@@ -877,7 +877,7 @@ exports.convert = {
 
     'Convert a multipage PDF to a collection of JPGs ': function(test) {
         test.expect(4);
-        doc.convert('./test/pics/multipage.pdf', 'jpg', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/multipage.pdf', '/tmp/gebo-imagemagick', { format: 'jpg' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/zip');
                 test.equal(path, '/tmp/gebo-imagemagick/multipage.jpg.zip');
@@ -900,7 +900,7 @@ exports.convert = {
 
     'Convert a multipage PDF to a collection of PNGs ': function(test) {
         test.expect(4);
-        doc.convert('./test/pics/multipage.pdf', 'png', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/multipage.pdf', '/tmp/gebo-imagemagick', { format: 'png' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/zip');
                 test.equal(path, '/tmp/gebo-imagemagick/multipage.png.zip');
@@ -923,7 +923,7 @@ exports.convert = {
 
     'Convert a multipage PDF to a collection of TIFs ': function(test) {
         test.expect(4);
-        doc.convert('./test/pics/multipage.pdf', 'tif', '/tmp/gebo-imagemagick').
+        doc.convert('./test/pics/multipage.pdf', '/tmp/gebo-imagemagick', { format: 'tif' }).
             then(function(path) {
                 test.equal(mime.lookup(path), 'application/zip');
                 test.equal(path, '/tmp/gebo-imagemagick/multipage.tif.zip');
