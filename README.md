@@ -58,20 +58,6 @@ dpkg -r imagemagick-6.8.9
 sudo npm install gebo-imagemagick-action
 ```
 
-# Configure gebo.json
-
-The maximum allowable processing time is set in gebo.json:
-
-```
-{
-    ...
-    "imagemagick": {
-        "timeout": 20000
-    }
-    ...
-}
-```
-
 # Enable
 
 ```
@@ -82,6 +68,6 @@ gebo.enable('imagemagick', require('gebo-imagemagick-action'));
 # Test
 
 ```
-sudo nodeunit test
+sudo grunt nodeunit
 ```
 

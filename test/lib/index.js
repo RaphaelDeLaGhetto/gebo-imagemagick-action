@@ -36,10 +36,18 @@ exports.convert = {
               });
     },
 
-    // How do I test this?
-//    'Kill the imagemagick process if it executes longer than allowed': function(test) {
-//        test.done();
-//    },
+    'Kill the imagemagick process if it executes longer than allowed': function(test) {
+        test.expect(1);
+        doc.convert('./test/pics/gebo.bmp', 'gif', '/tmp/gebo-imagemagick', { timeLimit: 50 }).
+            then(function(path) {
+                test.equal(path.error, 'Sorry, that file took too long to process');
+                test.done();
+              }).
+            catch(function(err) {
+                test.ok(false, err);
+                test.done();
+              });
+    },
 
     /**
      * BMP
