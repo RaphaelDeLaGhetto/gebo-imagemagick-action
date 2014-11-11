@@ -40,11 +40,11 @@ exports.convert = {
         test.expect(1);
         doc.convert('./test/pics/gebo.bmp', 'gif', '/tmp/gebo-imagemagick', { timeLimit: 50 }).
             then(function(path) {
-                test.equal(path.error, 'Sorry, that file took too long to process');
+                test.ok(false, 'This should throw an error');
                 test.done();
               }).
             catch(function(err) {
-                test.ok(false, err);
+                test.equal(err, 'Sorry, that file took too long to process');
                 test.done();
               });
     },
@@ -946,53 +946,3 @@ exports.convert = {
 };
 
 
-/**
- * getOutputFileName
- */
-exports.getOutputFileName = {
-
-    'Change the file extension to that specified': function(test) {
-        test.expect(2);
-        var filename = doc.getOutputFileName('/tmp/gebo-imagemagick/gebo.png', 'jpg');        
-        test.equal(filename, 'gebo.jpg');
-        filename = doc.getOutputFileName('gebo.pdf', 'png');
-        test.equal(filename, 'gebo.png');
-        test.done();
-    },
-
-    'Change the file extension to that specified on an infile with no extension': function(test) {
-        test.expect(2);
-        var filename = doc.getOutputFileName('/tmp/gebo-imagemagick/gebo', 'pdf');        
-        test.equal(filename, 'gebo.pdf');
-        filename = doc.getOutputFileName('gebo', 'png');
-        test.equal(filename, 'gebo.png');
-        test.done();
-    },
-
-    'Change the file extension to that specified on hidden file with no extension': function(test) {
-        test.expect(2);
-        var filename = doc.getOutputFileName('/tmp/gebo-imagemagick/.hidden', 'pdf');        
-        test.equal(filename, '.hidden.pdf');
-        filename = doc.getOutputFileName('.hidden', 'png');        
-        test.equal(filename, '.hidden.png');
-        test.done();
-    },
-
-    'Change the file extension to that specified on a hidden file with an extension': function(test) {
-        test.expect(2);
-        var filename = doc.getOutputFileName('/tmp/gebo-imagemagick/.hidden.png', 'pdf');        
-        test.equal(filename, '.hidden.pdf');
-        filename = doc.getOutputFileName('.hidden.pdf', 'png');        
-        test.equal(filename, '.hidden.png');
-        test.done();
-    },
-
-    'Should overwrite any unusual extensions': function(test) {
-        test.expect(2);
-        var filename = doc.getOutputFileName('/tmp/gebo-imagemagick/somefile.someweirdextension', 'png');        
-        test.equal(filename, 'somefile.png');
-        filename = doc.getOutputFileName('somefile.someweirdextension', 'png');        
-        test.equal(filename, 'somefile.png');
-        test.done();
-    },
-};
