@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "archiver": "^0.11.0",
-    "gebo-utils": "0.0.4",
+    "gebo-utils": "0.0.*",
     "mime": "^1.2.11",
     "mkdirp": "^0.5.0",
     "nconf": "^0.6.9",
