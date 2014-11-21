@@ -1,7 +1,6 @@
 var doc = require('../../lib'),
-    fs = require('fs'),
-    mime = require('mime'),
-    rimraf = require('rimraf');
+    fs = require('fs-extra'),
+    mime = require('mime');
 
 /**
  * convert
@@ -9,7 +8,7 @@ var doc = require('../../lib'),
 exports.convert = {
 
     tearDown: function(callback) {
-        rimraf('/tmp/gebo-imagemagick', function() {
+        fs.remove('/tmp/gebo-imagemagick', function() {
             callback();
           });
     },
@@ -17,28 +16,34 @@ exports.convert = {
     /**
      * Timeout stuff
      */
-    'Write the imagemagick PID to a file in the output directory': function(test) {
+    'Write the imagemagick PID to a file in the /tmp directory': function(test) {
         test.expect(1);
-        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', { format: 'jpg' }).
+
+        var options = { format: 'jpg', pidFile: '/tmp/file.pid' };
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', options).
             then(function(path) {
                 try {
-                  fs.openSync('/tmp/gebo.jpg.pid', 'r');
+                  fs.openSync('/tmp/file.pid', 'r');
                   test.ok(true);
                 }
                 catch(err) {
                   test.ok(false, err);
                 }
+
+                fs.remove('/tmp/center.png');
                 test.done();
-               }).
+              }).
             catch(function(err) {
                 test.ok(false, err);
                 test.done();
               });
     },
 
-    'Kill the imagemagick process if it executes longer than allowed': function(test) {
+    // This doesn't actually time out. The option is set by the gebo-server
+    'Return error if options.returnNow is set to true': function(test) {
         test.expect(1);
-        doc.convert('./test/pics/gebo.bmp', '/tmp/gebo-imagemagick', { format: 'gif', timeLimit: 50 }).
+        var options = { pidFile: '/tmp/file.pid', returnNow: 'Sorry, that file took too long to process' };
+        doc.convert('./test/pics/gebo.png', '/tmp/gebo-imagemagick', options).
             then(function(path) {
                 test.ok(false, 'This should throw an error');
                 test.done();

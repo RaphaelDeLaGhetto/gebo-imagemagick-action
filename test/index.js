@@ -1,10 +1,9 @@
 'use strict';
 
 var actionModule = require('..'),
-    fs = require('fs'),
+    fs = require('fs-extra'),
     mime = require('mime'),
-    nconf = require('nconf'),
-    rimraf = require('rimraf');
+    nconf = require('nconf');
 
 var DOMAIN = nconf.get('domain');
 
@@ -48,32 +47,6 @@ exports.convert = {
     },
 
     /**
-     * Time out
-     */
-    'Kill the imagemagick process if it executes longer than allowed': function(test) {
-        test.expect(1);
-        actionModule.actions.convert({ resource: 'convert',
-                                       execute: 'true',
-                                     },
-                                     { content: { format: 'gif', raw: true, timeLimit: 5 },
-                                       file: { 
-                                            path: '/tmp/gebo.bmp',
-                                            originalname: 'my.bmp',
-                                            type: 'image/bmp', 
-                                            size: 968970,
-                                       },
-              }).
-            then(function(pic) {
-                test.equal(pic.error, 'Sorry, that file took too long to process');
-                test.done();
-              }).
-            catch(function(err) {
-                test.ok(false, err);
-                test.done();
-              });
-    },
-
-    /**
      * BMP
      */
     'Convert BMP to a GIF and return raw data': function(test) {
@@ -81,7 +54,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif', raw: true },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', raw: true },
                                        file: { 
                                             path: '/tmp/gebo.bmp',
                                             originalname: 'my.bmp',
@@ -95,7 +68,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.gif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -114,7 +87,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif' },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.bmp',
                                            originalname: 'my.bmp',
@@ -125,7 +98,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.bmp/my.gif');
                 try {
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -144,7 +117,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg', raw: true },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', raw: true },
                                        file: { 
                                             path: '/tmp/gebo.bmp',
                                             originalname: 'my.bmp',
@@ -158,7 +131,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.jpg');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -177,7 +150,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg' },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.bmp',
                                            originalname: 'my.bmp',
@@ -188,7 +161,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.bmp/my.jpg');
                 try {
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -207,7 +180,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf', raw: true },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', raw: true },
                                        file: { 
                                             path: '/tmp/gebo.bmp',
                                             originalname: 'my.bmp',
@@ -221,7 +194,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.pdf');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -240,7 +213,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf' },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.bmp',
                                            originalname: 'my.bmp',
@@ -251,7 +224,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.bmp/my.pdf');
                 try {
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -270,7 +243,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png', raw: true },
+                                     { content: { format: 'png', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.bmp',
                                             originalname: 'my.bmp',
@@ -284,7 +257,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.png');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -303,7 +276,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png' },
+                                     { content: { format: 'png', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.bmp',
                                            originalname: 'my.bmp',
@@ -314,7 +287,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.bmp/my.png');
                 try {
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -333,7 +306,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.bmp',
                                             originalname: 'my.bmp',
@@ -347,7 +320,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -366,7 +339,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.bmp',
                                            originalname: 'my.bmp',
@@ -377,7 +350,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.bmp/my.tif');
                 try {
-                  rimraf.sync('./public/gebo.bmp');
+                  fs.removeSync('./public/gebo.bmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -396,7 +369,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebobmp',
                                             originalname: 'mybmp',
@@ -410,7 +383,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'mybmp.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebobmp');
+                  fs.removeSync('./public/gebobmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -429,7 +402,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebobmp',
                                            originalname: 'mybmp',
@@ -440,7 +413,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebobmp/mybmp.tif');
                 try {
-                  rimraf.sync('./public/gebobmp');
+                  fs.removeSync('./public/gebobmp');
                   test.ok(true);
                 }
                 catch (err) {
@@ -462,7 +435,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.gif',
                                             originalname: 'my.gif',
@@ -476,7 +449,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.bmp');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -495,7 +468,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.gif',
                                            originalname: 'my.gif',
@@ -506,7 +479,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.gif/my.bmp');
                 try {
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -525,7 +498,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg', raw: true },
+                                     { content: { format: 'jpg', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.gif',
                                             originalname: 'my.gif',
@@ -539,7 +512,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.jpg');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -558,7 +531,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg' },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.gif',
                                            originalname: 'my.gif',
@@ -569,7 +542,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.gif/my.jpg');
                 try {
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -588,7 +561,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf', raw: true },
+                                     { content: { format: 'pdf', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.gif',
                                             originalname: 'my.gif',
@@ -602,7 +575,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.pdf');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -621,7 +594,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf' },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.gif',
                                            originalname: 'my.gif',
@@ -632,7 +605,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.gif/my.pdf');
                 try {
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -651,7 +624,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png', raw: true },
+                                     { content: { format: 'png', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.gif',
                                             originalname: 'my.gif',
@@ -665,7 +638,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.png');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -684,7 +657,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png' },
+                                     { content: { format: 'png', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.gif',
                                            originalname: 'my.gif',
@@ -695,7 +668,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.gif/my.png');
                 try {
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -714,7 +687,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.gif',
                                             originalname: 'my.gif',
@@ -728,7 +701,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -747,7 +720,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.gif',
                                            originalname: 'my.gif',
@@ -758,7 +731,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.gif/my.tif');
                 try {
-                  rimraf.sync('./public/gebo.gif');
+                  fs.removeSync('./public/gebo.gif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -777,7 +750,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebogif',
                                             originalname: 'mygif',
@@ -791,7 +764,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'mygif.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebogif');
+                  fs.removeSync('./public/gebogif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -810,7 +783,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebogif',
                                            originalname: 'mygif',
@@ -821,7 +794,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebogif/mygif.tif');
                 try {
-                  rimraf.sync('./public/gebogif');
+                  fs.removeSync('./public/gebogif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -843,7 +816,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.jpg',
                                             originalname: 'my.jpg',
@@ -857,7 +830,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.bmp');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -876,7 +849,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.jpg',
                                            originalname: 'my.jpg',
@@ -887,7 +860,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.jpg/my.bmp');
                 try {
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -906,7 +879,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif', raw: true },
+                                     { content: { format: 'gif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.jpg',
                                             originalname: 'my.jpg',
@@ -920,7 +893,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.gif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -939,7 +912,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif' },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.jpg',
                                            originalname: 'my.jpg',
@@ -950,7 +923,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.jpg/my.gif');
                 try {
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -969,7 +942,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf', raw: true },
+                                     { content: { format: 'pdf', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.jpg',
                                             originalname: 'my.jpg',
@@ -983,7 +956,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.pdf');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1002,7 +975,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf' },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.jpg',
                                            originalname: 'my.jpg',
@@ -1013,7 +986,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.jpg/my.pdf');
                 try {
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1032,7 +1005,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png', raw: true },
+                                     { content: { format: 'png', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.jpg',
                                             originalname: 'my.jpg',
@@ -1046,7 +1019,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.png');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1065,7 +1038,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png' },
+                                     { content: { format: 'png', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.jpg',
                                            originalname: 'my.jpg',
@@ -1076,7 +1049,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.jpg/my.png');
                 try {
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1095,7 +1068,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.jpg',
                                             originalname: 'my.jpg',
@@ -1109,7 +1082,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1128,7 +1101,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.jpg',
                                            originalname: 'my.jpg',
@@ -1139,7 +1112,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.jpg/my.tif');
                 try {
-                  rimraf.sync('./public/gebo.jpg');
+                  fs.removeSync('./public/gebo.jpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1158,7 +1131,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png', raw: true },
+                                     { content: { format: 'png', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebojpg',
                                             originalname: 'myjpg',
@@ -1172,7 +1145,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'myjpg.png');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebojpg');
+                  fs.removeSync('./public/gebojpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1191,7 +1164,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png' },
+                                     { content: { format: 'png', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebojpg',
                                            originalname: 'myjpg',
@@ -1202,7 +1175,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebojpg/myjpg.png');
                 try {
-                  rimraf.sync('./public/gebojpg');
+                  fs.removeSync('./public/gebojpg');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1224,7 +1197,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.pdf',
                                             originalname: 'my.pdf',
@@ -1238,7 +1211,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.bmp');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1257,7 +1230,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.pdf',
                                            originalname: 'my.pdf',
@@ -1268,7 +1241,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.pdf/my.bmp');
                 try {
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1287,7 +1260,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif', raw: true },
+                                     { content: { format: 'gif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.pdf',
                                             originalname: 'my.pdf',
@@ -1301,7 +1274,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.gif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1320,7 +1293,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif' },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.pdf',
                                            originalname: 'my.pdf',
@@ -1331,7 +1304,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.pdf/my.gif');
                 try {
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1350,7 +1323,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg', raw: true },
+                                     { content: { format: 'jpg', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.pdf',
                                             originalname: 'my.pdf',
@@ -1364,7 +1337,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.jpg');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1383,7 +1356,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg' },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.pdf',
                                            originalname: 'my.pdf',
@@ -1394,7 +1367,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.pdf/my.jpg');
                 try {
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1413,7 +1386,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png', raw: true },
+                                     { content: { format: 'png', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.pdf',
                                             originalname: 'my.pdf',
@@ -1427,7 +1400,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.png');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1446,7 +1419,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png' },
+                                     { content: { format: 'png', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.pdf',
                                            originalname: 'my.pdf',
@@ -1457,7 +1430,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.pdf/my.png');
                 try {
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1476,7 +1449,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.pdf',
                                             originalname: 'my.pdf',
@@ -1490,7 +1463,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1509,7 +1482,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.pdf',
                                            originalname: 'my.pdf',
@@ -1520,7 +1493,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.pdf/my.tif');
                 try {
-                  rimraf.sync('./public/gebo.pdf');
+                  fs.removeSync('./public/gebo.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1539,7 +1512,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg', raw: true },
+                                     { content: { format: 'jpg', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebopdf',
                                             originalname: 'mypdf',
@@ -1553,7 +1526,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'mypdf.jpg');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebopdf');
+                  fs.removeSync('./public/gebopdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1572,7 +1545,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg' },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebopdf',
                                            originalname: 'mypdf',
@@ -1583,7 +1556,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebopdf/mypdf.jpg');
                 try {
-                  rimraf.sync('./public/gebopdf');
+                  fs.removeSync('./public/gebopdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1605,7 +1578,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.png',
                                             originalname: 'my.png',
@@ -1619,7 +1592,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.bmp');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1638,7 +1611,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.png',
                                            originalname: 'my.png',
@@ -1649,7 +1622,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.png/my.bmp');
                 try {
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1668,7 +1641,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif', raw: true },
+                                     { content: { format: 'gif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.png',
                                             originalname: 'my.png',
@@ -1682,7 +1655,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.gif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1701,7 +1674,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif' },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.png',
                                            originalname: 'my.png',
@@ -1712,7 +1685,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.png/my.gif');
                 try {
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1731,7 +1704,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg', raw: true },
+                                     { content: { format: 'jpg', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.png',
                                             originalname: 'my.png',
@@ -1745,7 +1718,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.jpg');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1764,7 +1737,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg' },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.png',
                                            originalname: 'my.png',
@@ -1775,7 +1748,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.png/my.jpg');
                 try {
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1794,7 +1767,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf', raw: true },
+                                     { content: { format: 'pdf', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.png',
                                             originalname: 'my.png',
@@ -1808,7 +1781,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.pdf');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1827,7 +1800,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf' },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.png',
                                            originalname: 'my.png',
@@ -1838,7 +1811,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.png/my.pdf');
                 try {
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1857,7 +1830,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif', raw: true },
+                                     { content: { format: 'tif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.png',
                                             originalname: 'my.png',
@@ -1871,7 +1844,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.tif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1890,7 +1863,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'tif' },
+                                     { content: { format: 'tif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.png',
                                            originalname: 'my.png',
@@ -1901,7 +1874,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.png/my.tif');
                 try {
-                  rimraf.sync('./public/gebo.png');
+                  fs.removeSync('./public/gebo.png');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1920,7 +1893,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebopng',
                                             originalname: 'mypng',
@@ -1934,7 +1907,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'mypng.bmp');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebopng');
+                  fs.removeSync('./public/gebopng');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1953,7 +1926,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebopng',
                                            originalname: 'mypng',
@@ -1964,7 +1937,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebopng/mypng.bmp');
                 try {
-                  rimraf.sync('./public/gebopng');
+                  fs.removeSync('./public/gebopng');
                   test.ok(true);
                 }
                 catch (err) {
@@ -1986,7 +1959,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.tif',
                                             originalname: 'my.tif',
@@ -2000,7 +1973,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.bmp');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2019,7 +1992,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.tif',
                                            originalname: 'my.tif',
@@ -2030,7 +2003,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.tif/my.bmp');
                 try {
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2049,7 +2022,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif', raw: true },
+                                     { content: { format: 'gif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.tif',
                                             originalname: 'my.tif',
@@ -2063,7 +2036,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.gif');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2082,7 +2055,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif' },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.tif',
                                            originalname: 'my.tif',
@@ -2093,7 +2066,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.tif/my.gif');
                 try {
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2112,7 +2085,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg', raw: true },
+                                     { content: { format: 'jpg', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.tif',
                                             originalname: 'my.tif',
@@ -2126,7 +2099,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.jpg');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2145,7 +2118,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'jpg' },
+                                     { content: { format: 'jpg', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.tif',
                                            originalname: 'my.tif',
@@ -2156,7 +2129,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.tif/my.jpg');
                 try {
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2175,7 +2148,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf', raw: true },
+                                     { content: { format: 'pdf', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.tif',
                                             originalname: 'my.tif',
@@ -2189,7 +2162,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.pdf');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2208,7 +2181,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf' },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.tif',
                                            originalname: 'my.tif',
@@ -2219,7 +2192,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.tif/my.pdf');
                 try {
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2238,7 +2211,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png', raw: true },
+                                     { content: { format: 'png', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebo.tif',
                                             originalname: 'my.tif',
@@ -2252,7 +2225,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.png');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2271,7 +2244,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'png' },
+                                     { content: { format: 'png', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebo.tif',
                                            originalname: 'my.tif',
@@ -2282,7 +2255,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebo.tif/my.png');
                 try {
-                  rimraf.sync('./public/gebo.tif');
+                  fs.removeSync('./public/gebo.tif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2301,7 +2274,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf', raw: true },
+                                     { content: { format: 'pdf', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/gebotif',
                                             originalname: 'mytif',
@@ -2315,7 +2288,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'mytif.pdf');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/gebotif');
+                  fs.removeSync('./public/gebotif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2334,7 +2307,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'pdf' },
+                                     { content: { format: 'pdf', pidFile: '/tmp/process.pid', },
                                        file: { 
                                            path: '/tmp/gebotif',
                                            originalname: 'mytif',
@@ -2345,7 +2318,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/gebotif/mytif.pdf');
                 try {
-                  rimraf.sync('./public/gebotif');
+                  fs.removeSync('./public/gebotif');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2368,7 +2341,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp', raw: true },
+                                     { content: { format: 'bmp', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/multipage.pdf',
                                             originalname: 'my.pdf',
@@ -2382,7 +2355,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.bmp.zip');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/multipage.pdf');
+                  fs.removeSync('./public/multipage.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2401,7 +2374,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'bmp' },
+                                     { content: { format: 'bmp', pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/multipage.pdf',
                                             originalname: 'my.pdf',
@@ -2412,7 +2385,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/multipage.pdf/my.bmp.zip');
                 try {
-                  rimraf.sync('./public/multipage.pdf');
+                  fs.removeSync('./public/multipage.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2431,7 +2404,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif', raw: true },
+                                     { content: { format: 'gif', raw: true, pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/multipage.pdf',
                                             originalname: 'my.pdf',
@@ -2445,7 +2418,7 @@ exports.convert = {
                 test.equal(pic.fileName, 'my.gif.zip');
                 try {
                   fs.closeSync(fs.openSync(pic.filePath, 'r'));
-                  rimraf.sync('./public/multipage.pdf');
+                  fs.removeSync('./public/multipage.pdf');
                   test.ok(true);
                 }
                 catch (err) {
@@ -2464,7 +2437,7 @@ exports.convert = {
         actionModule.actions.convert({ resource: 'convert',
                                        execute: 'true',
                                      },
-                                     { content: { format: 'gif' },
+                                     { content: { format: 'gif', pidFile: '/tmp/process.pid', },
                                        file: { 
                                             path: '/tmp/multipage.pdf',
                                             originalname: 'my.pdf',
@@ -2475,7 +2448,7 @@ exports.convert = {
             then(function(link) {
                 test.equal(link, DOMAIN + '/multipage.pdf/my.gif.zip');
                 try {
-                  rimraf.sync('./public/multipage.pdf');
+                  fs.removeSync('./public/multipage.pdf');
                   test.ok(true);
                 }
                 catch (err) {
